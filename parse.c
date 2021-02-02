@@ -9,7 +9,7 @@ int main()
         exit(1);
     }
 
-    char line[200];
+    char line[400];
     while(fgets(line, sizeof(line), the_file))
     {
         char * token;
@@ -23,5 +23,4 @@ int main()
         printf("\n");
     }
 }
-
 
