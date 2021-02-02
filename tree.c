@@ -55,8 +55,11 @@ int main(int argc, char **argv)
 		printf("%i: ", loop_counter);
         while(token != NULL)
         {
-			printf(" %i: ", token_counter);
+			printf(" %i:", token_counter);
+
             printf("%s", token);
+			if(token_counter == 2 && loop_counter > 1) { token = strtok(NULL, ","); printf(",%s", token); }
+
             token = strtok(NULL, ",");
 			token_counter++;
         }
