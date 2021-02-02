@@ -36,53 +36,82 @@ int main(int argc, char **argv)
 
 	//  	My code starts here
 
-
-	xmlNodePtr table = xmlNewChild(body, NULL, BAD_CAST "table", NULL);
-	xmlNewProp(table, BAD_CAST "align", BAD_CAST "left");
-	xmlNewProp(table, BAD_CAST "border", BAD_CAST "1");
-	xmlNewProp(table, BAD_CAST "cellspacing", BAD_CAST "0");
-	xmlNewProp(table, BAD_CAST "cellpadding", BAD_CAST "0");
-	xmlNewProp(table, BAD_CAST "width", BAD_CAST "100%");
-	xmlNodePtr caption = xmlNewChild(table, NULL, BAD_CAST "caption", NULL);
-	xmlNodePtr strong = xmlNewChild(caption, NULL, BAD_CAST "strong", BAD_CAST "Temperature and Dew Point for SAN DIEGO INTERNATIONAL AIRPORT, CA US");
+	FILE *the_file = fopen("data.csv", "r");
+    if (the_file == NULL)
+    {
+        perror("Unable to open the file.");
+        exit(1);
+    }
 
 
-	xmlNodePtr thead = xmlNewChild(table, NULL, BAD_CAST "thead", NULL);
-	xmlNodePtr tr1 = xmlNewChild(thead, NULL, BAD_CAST "tr", NULL);
-	xmlNodePtr th1 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
-	xmlNewProp(th1, BAD_CAST "rowspan", BAD_CAST "2");
-	xmlNodePtr img = xmlNewChild(th1, NULL, BAD_CAST "img", NULL);
-	xmlNewProp(img, BAD_CAST "src", BAD_CAST "noaa.png");
-	xmlNewProp(img, BAD_CAST "alt", BAD_CAST "NOAA Logo");
-	xmlNewProp(img, BAD_CAST "border", BAD_CAST "0");
-	xmlNewProp(img, BAD_CAST "align", BAD_CAST "left");
-	xmlNewProp(img, BAD_CAST "width", BAD_CAST "100");
-	xmlNewProp(img, BAD_CAST "height", BAD_CAST "");
-	xmlNodePtr th2 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong2 = xmlNewChild(th2, NULL, BAD_CAST "strong", BAD_CAST "LATITUDE");
-	xmlNodePtr th3 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong3 = xmlNewChild(th3, NULL, BAD_CAST "strong", BAD_CAST "LONGITUDE");
+	int loop_counter = 1;
+	int token_counter = 1;
+	char line[1024];
+    while(fgets(line, sizeof(line), the_file))
+    {
+        char * token;
+        token = strtok(line, ",");
+
+		printf("%i: ", loop_counter);
+        while(token != NULL)
+        {
+			printf(" %i: ", token_counter);
+            printf("%s", token);
+            token = strtok(NULL, ",");
+			token_counter++;
+        }
+        printf("\n");
+		token_counter = 1;
+		loop_counter++;
+    }
 
 
-	xmlNodePtr tr2 = xmlNewChild(thead, NULL, BAD_CAST "tr", NULL);
-
-	xmlNodePtr th4 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong4 = xmlNewChild(th4, NULL, BAD_CAST "strong", BAD_CAST "32.7336");
-	xmlNodePtr th5 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong5 = xmlNewChild(th5, NULL, BAD_CAST "strong", BAD_CAST "117.1831");
-
-
-	xmlNodePtr tbody = xmlNewChild(table, NULL, BAD_CAST "tbody", NULL);
-	xmlNodePtr tr3 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
-	xmlNodePtr td1 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
-	xmlNodePtr strong6 = xmlNewChild(td1, NULL, BAD_CAST "strong", BAD_CAST "DATE");
-	xmlNodePtr td2 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
-	xmlNodePtr strong7 = xmlNewChild(td2, NULL, BAD_CAST "strong", BAD_CAST "HLY-DEWP-NORMAL");
-	xmlNodePtr td3 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
-	xmlNodePtr strong8 = xmlNewChild(td3, NULL, BAD_CAST "strong", BAD_CAST "HLY-TEMP-NORMAL");
+			xmlNodePtr table = xmlNewChild(body, NULL, BAD_CAST "table", NULL);
+			xmlNewProp(table, BAD_CAST "align", BAD_CAST "left");
+			xmlNewProp(table, BAD_CAST "border", BAD_CAST "1");
+			xmlNewProp(table, BAD_CAST "cellspacing", BAD_CAST "0");
+			xmlNewProp(table, BAD_CAST "cellpadding", BAD_CAST "0");
+			xmlNewProp(table, BAD_CAST "width", BAD_CAST "100%");
+			xmlNodePtr caption = xmlNewChild(table, NULL, BAD_CAST "caption", NULL);
+			xmlNodePtr strong = xmlNewChild(caption, NULL, BAD_CAST "strong", BAD_CAST "Temperature and Dew Point for SAN DIEGO INTERNATIONAL AIRPORT, CA US");
 
 
-	xmlNodePtr tr4 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
+			xmlNodePtr thead = xmlNewChild(table, NULL, BAD_CAST "thead", NULL);
+			xmlNodePtr tr1 = xmlNewChild(thead, NULL, BAD_CAST "tr", NULL);
+			xmlNodePtr th1 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
+			xmlNewProp(th1, BAD_CAST "rowspan", BAD_CAST "2");
+			xmlNodePtr img = xmlNewChild(th1, NULL, BAD_CAST "img", NULL);
+			xmlNewProp(img, BAD_CAST "src", BAD_CAST "noaa.png");
+			xmlNewProp(img, BAD_CAST "alt", BAD_CAST "NOAA Logo");
+			xmlNewProp(img, BAD_CAST "border", BAD_CAST "0");
+			xmlNewProp(img, BAD_CAST "align", BAD_CAST "left");
+			xmlNewProp(img, BAD_CAST "width", BAD_CAST "100");
+			xmlNewProp(img, BAD_CAST "height", BAD_CAST "");
+			xmlNodePtr th2 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
+			xmlNodePtr strong2 = xmlNewChild(th2, NULL, BAD_CAST "strong", BAD_CAST "LATITUDE");
+			xmlNodePtr th3 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
+			xmlNodePtr strong3 = xmlNewChild(th3, NULL, BAD_CAST "strong", BAD_CAST "LONGITUDE");
+
+
+			xmlNodePtr tr2 = xmlNewChild(thead, NULL, BAD_CAST "tr", NULL);
+
+			xmlNodePtr th4 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
+			xmlNodePtr strong4 = xmlNewChild(th4, NULL, BAD_CAST "strong", BAD_CAST "32.7336");
+			xmlNodePtr th5 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
+			xmlNodePtr strong5 = xmlNewChild(th5, NULL, BAD_CAST "strong", BAD_CAST "117.1831");
+
+
+			xmlNodePtr tbody = xmlNewChild(table, NULL, BAD_CAST "tbody", NULL);
+			xmlNodePtr tr3 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
+			xmlNodePtr td1 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
+			xmlNodePtr strong6 = xmlNewChild(td1, NULL, BAD_CAST "strong", BAD_CAST "DATE");
+			xmlNodePtr td2 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
+			xmlNodePtr strong7 = xmlNewChild(td2, NULL, BAD_CAST "strong", BAD_CAST "HLY-DEWP-NORMAL");
+			xmlNodePtr td3 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
+			xmlNodePtr strong8 = xmlNewChild(td3, NULL, BAD_CAST "strong", BAD_CAST "HLY-TEMP-NORMAL");
+
+
+			xmlNodePtr tr4 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
 
 
 

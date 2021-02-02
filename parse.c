@@ -9,7 +9,7 @@ int main()
         exit(1);
     }
 
-    char line[400];
+    char line[1024];
     while(fgets(line, sizeof(line), the_file))
     {
         char * token;
