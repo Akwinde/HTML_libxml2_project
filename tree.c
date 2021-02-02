@@ -5,6 +5,16 @@
 
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
+
+void print_token(int * loop_counter, int * token_counter, char * token)
+{
+	if(*loop_counter == 1 && *token_counter == 3) { printf(" %i:", *token_counter); printf("%s", token); }
+	if(*loop_counter == 1 && *token_counter == 4) { printf(" %i:", *token_counter); printf("%s", token); }
+	if(*loop_counter == 2 && *token_counter == 3) { printf(" %i:", *token_counter); printf("%s", token); }
+	if(*loop_counter == 2 && *token_counter == 4) { printf(" %i:", *token_counter); printf("%s", token); }
+}
+
+
 int main(int argc, char **argv)
 {
 	xmlDocPtr doc = NULL;       	/* document pointer */
@@ -55,12 +65,14 @@ int main(int argc, char **argv)
 		printf("%i: ", loop_counter);
         while(token != NULL)
         {
-			printf(" %i:", token_counter);
+			// Print token function here
+			print_token(&loop_counter, &token_counter, token);
 
-            printf("%s", token);
-			if(token_counter == 2 && loop_counter > 1) { token = strtok(NULL, ","); printf(",%s", token); }
-
-            token = strtok(NULL, ",");
+            if(token_counter == 1 && loop_counter > 1)
+			{
+				token = strtok(NULL, "\"");
+			}
+			else token = strtok(NULL, ",");
 			token_counter++;
         }
         printf("\n");
