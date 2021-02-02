@@ -6,12 +6,16 @@
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
 
-void print_token(int * loop_counter, int * token_counter, char * token)
+const char* get_token(int * loop_counter, int * token_counter, char * token)
 {
-	if(*loop_counter == 1 && *token_counter == 3) { printf(" %i:", *token_counter); printf("%s", token); }
-	if(*loop_counter == 1 && *token_counter == 4) { printf(" %i:", *token_counter); printf("%s", token); }
-	if(*loop_counter == 2 && *token_counter == 3) { printf(" %i:", *token_counter); printf("%s", token); }
-	if(*loop_counter == 2 && *token_counter == 4) { printf(" %i:", *token_counter); printf("%s", token); }
+	if(*loop_counter == 1 && *token_counter == 3)  { return token; }			// LATITUDE
+	else if(*loop_counter == 1 && *token_counter == 4)  { return token; }		// LONGITUDE
+	else if(*loop_counter == 2 && *token_counter == 3)  { return token; }		// 32.7336
+	else if(*loop_counter == 2 && *token_counter == 4)  { return token; }		// -117.1831
+	else if(*loop_counter == 1 && *token_counter == 15) { return token; }		// HLY-DEWP-NORMAL
+	else if(*loop_counter == 1 && *token_counter == 23) { return token; }		// HLY-TEMP-NORMAL
+	else return "";																// return Nothing
+
 }
 
 
@@ -60,13 +64,16 @@ int main(int argc, char **argv)
     while(fgets(line, sizeof(line), the_file))
     {
         char * token;
+		char * string;
         token = strtok(line, ",");
 
 		printf("%i: ", loop_counter);
         while(token != NULL)
         {
-			// Print token function here
-			print_token(&loop_counter, &token_counter, token);
+			// Print function here
+			string = get_token(&loop_counter, &token_counter, token);
+			printf("%s", string);
+			// Print function here
 
             if(token_counter == 1 && loop_counter > 1)
 			{
