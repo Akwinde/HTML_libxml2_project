@@ -8,26 +8,12 @@
 
 const char* get_token(int * loop_counter, int * token_counter, char * token)
 {
-	if(*loop_counter == 2 && *token_counter == 3)								// 32.7336
-	{
-		return token;
-	}
-	else if(*loop_counter == 2 && *token_counter == 4)							// -117.1831
-	{
-		return token;
-	}
-	else if(*loop_counter == 1 && *token_counter == 15)							// HLY-DEWP-NORMAL
-	{
-		return token;
-	}
-
-	else if(*loop_counter == 1 && *token_counter == 23)							// HLY-TEMP-NORMAL
-	{
-		return token;
-	}
-
-	else return "";																// return Nothing
-
+	if(*loop_counter == 2 && *token_counter == 3) { return token; }																		// 32.7336
+	else if(*loop_counter == 2 && *token_counter == 4) { return token; }																// -117.1831
+	else if(*loop_counter == 1 && *token_counter == 15)	{ return token; }																// HLY-DEWP-NORMAL
+	else if(*loop_counter == 1 && *token_counter == 23)	{ return token; }																// HLY-TEMP-NORMAL
+	else if(*loop_counter > 1 && (*token_counter == 6 || *token_counter == 15 || *token_counter == 23))	{ return token; }				// table data to fill in
+	else return "";																														// return Nothing
 }
 
 
@@ -62,7 +48,8 @@ int main(int argc, char **argv)
 
 
 
-	//  	My code starts here
+	//  	My code starts here | | | |
+	//							v v v v
 
 	xmlNodePtr table = xmlNewChild(body, NULL, BAD_CAST "table", NULL);
 	xmlNewProp(table, BAD_CAST "align", BAD_CAST "left");
@@ -94,9 +81,7 @@ int main(int argc, char **argv)
 	xmlNodePtr tr2 = xmlNewChild(thead, NULL, BAD_CAST "tr", NULL);
 
 	xmlNodePtr th4 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong4 = xmlNewChild(th4, NULL, BAD_CAST "strong", BAD_CAST "Fill This in");		// Fill This in
 	xmlNodePtr th5 = xmlNewChild(tr2, NULL, BAD_CAST "th", NULL);
-	xmlNodePtr strong5 = xmlNewChild(th5, NULL, BAD_CAST "strong", BAD_CAST "Fill This in");		// Fill This in
 
 
 	xmlNodePtr tbody = xmlNewChild(table, NULL, BAD_CAST "tbody", NULL);
@@ -104,10 +89,12 @@ int main(int argc, char **argv)
 	xmlNodePtr td1 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
 	xmlNodePtr strong6 = xmlNewChild(td1, NULL, BAD_CAST "strong", BAD_CAST "DATE");
 	xmlNodePtr td2 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
-	xmlNodePtr strong7 = xmlNewChild(td2, NULL, BAD_CAST "strong", BAD_CAST "Fill This in");		// Fill this in
 	xmlNodePtr td3 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
-	xmlNodePtr strong8 = xmlNewChild(td3, NULL, BAD_CAST "strong", BAD_CAST "Fill This in");		// Fill this in
 
+
+	// Setting aside stack memory for xmlNodePtr to add table elements
+	xmlNodePtr node_pointer_array [40];
+	// Setting aside stack memory for xmlNodePtr to add table elements
 
 
 	// This code reads from file input
@@ -131,12 +118,26 @@ int main(int argc, char **argv)
 		printf("%i: ", loop_counter);
 		while(token != NULL)
 		{
-			// My functions are here
-
+			// My functions reside in here  | | | |
+			// 								v v v v
 			string = get_token(&loop_counter, &token_counter, token);
 			printf("%s", string);
 
-			// My functions are here
+			// This fills in the appropriate coordinates 32.7336 in the thead brackets 
+			if(loop_counter == 2 && token_counter == 3) { xmlNodePtr strong4 = xmlNewChild(th4, NULL, BAD_CAST "strong", BAD_CAST token); }
+			// This fills in the appropriate coordinates -117.1831 in the thead brackets
+			else if(loop_counter == 2 && token_counter == 4) { xmlNodePtr strong5 = xmlNewChild(th5, NULL, BAD_CAST "strong", BAD_CAST token); }
+			//  This fills in the appropriate title (HLY-DEWP-NORMAL in tbody tags
+			else if(loop_counter == 1 && token_counter == 15)	{ xmlNodePtr strong7 = xmlNewChild(td2, NULL, BAD_CAST "strong", BAD_CAST token); }
+			// This fills in the appropriate title (HLY-TEMP-NORMAL) in tbody tags
+			else if(loop_counter == 1 && token_counter == 23)	{ xmlNodePtr strong8 = xmlNewChild(td3, NULL, BAD_CAST "strong", BAD_CAST token); }
+			// This fills in the appropriate table data with the right tokens
+			else if(loop_counter > 1 && (token_counter == 6 || token_counter == 15 || token_counter == 23))	{ ; }
+
+
+
+			// My functions reside in here ^ ^ ^ ^
+			//							   | | | |
 
 			if(token_counter == 1 && loop_counter > 1)
 			{
@@ -156,7 +157,8 @@ int main(int argc, char **argv)
 	// xmlNodePtr tr4 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
 
 
-	//		My code ends here
+	//		My code ends here  ^ ^ ^ ^
+	//						   | | | |
 
 
 
