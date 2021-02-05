@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	xmlNewProp(img, BAD_CAST "border", BAD_CAST "0");
 	xmlNewProp(img, BAD_CAST "align", BAD_CAST "left");
 	xmlNewProp(img, BAD_CAST "width", BAD_CAST "100");
-	xmlNewProp(img, BAD_CAST "height", BAD_CAST "");
+	//xmlNewProp(img, BAD_CAST "height", BAD_CAST "");
 	xmlNodePtr th2 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
 	xmlNodePtr strong2 = xmlNewChild(th2, NULL, BAD_CAST "strong", BAD_CAST "LATITUDE");
 	xmlNodePtr th3 = xmlNewChild(tr1, NULL, BAD_CAST "th", NULL);
