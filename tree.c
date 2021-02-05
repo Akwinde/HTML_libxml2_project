@@ -5,18 +5,6 @@
 
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)
 
-
-const char* get_token(int * loop_counter, int * token_counter, char * token)
-{
-	if(*loop_counter == 2 && *token_counter == 3) { return token; }																		// 32.7336
-	else if(*loop_counter == 2 && *token_counter == 4) { return token; }																// -117.1831
-	else if(*loop_counter == 1 && *token_counter == 15)	{ return token; }																// HLY-DEWP-NORMAL
-	else if(*loop_counter == 1 && *token_counter == 23)	{ return token; }																// HLY-TEMP-NORMAL
-	else if(*loop_counter > 1 && (*token_counter == 6 || *token_counter == 15 || *token_counter == 23))	{ return token; }				// table data to fill in
-	else return "";																														// return Nothing
-}
-
-
 int main(int argc, char **argv)
 {
 	xmlDocPtr doc = NULL;       	/* document pointer */
@@ -92,9 +80,12 @@ int main(int argc, char **argv)
 	xmlNodePtr td3 = xmlNewChild(tr3, NULL, BAD_CAST "td", NULL);
 
 
-	// Setting aside stack memory for xmlNodePtr to add table elements
-	xmlNodePtr node_pointer_array [40];
-	// Setting aside stack memory for xmlNodePtr to add table elements
+	// Setting aside stack memory for xmlNodePtr Row, data and table elements
+	xmlNodePtr node_pointer_array_row [40];
+	xmlNodePtr node_pointer_array_data_date [40];
+	xmlNodePtr node_pointer_array_data_dewp [40];
+	xmlNodePtr node_pointer_array_data_temp [40];
+	// Setting aside stack memory for xmlNodePtr Row, data and table elements
 
 
 	// This code reads from file input
@@ -112,16 +103,12 @@ int main(int argc, char **argv)
 	while(fgets(line, sizeof(line), the_file))
 	{
 		char * token;
-		char * string;
 		token = strtok(line, ",");
 
-		printf("%i: ", loop_counter);
 		while(token != NULL)
 		{
-			// My functions reside in here  | | | |
-			// 								v v v v
-			string = get_token(&loop_counter, &token_counter, token);
-			printf("%s", string);
+			// Fill in table and row data accordingly  		| | | |
+			// 												v v v v
 
 			// This fills in the appropriate coordinates 32.7336 in the thead brackets 
 			if(loop_counter == 2 && token_counter == 3) { xmlNodePtr strong4 = xmlNewChild(th4, NULL, BAD_CAST "strong", BAD_CAST token); }
@@ -131,13 +118,25 @@ int main(int argc, char **argv)
 			else if(loop_counter == 1 && token_counter == 15)	{ xmlNodePtr strong7 = xmlNewChild(td2, NULL, BAD_CAST "strong", BAD_CAST token); }
 			// This fills in the appropriate title (HLY-TEMP-NORMAL) in tbody tags
 			else if(loop_counter == 1 && token_counter == 23)	{ xmlNodePtr strong8 = xmlNewChild(td3, NULL, BAD_CAST "strong", BAD_CAST token); }
-			// This fills in the appropriate table data with the right tokens
-			else if(loop_counter > 1 && (token_counter == 6 || token_counter == 15 || token_counter == 23))	{ ; }
+			// This fills in the first colummn with the "Date" table data using the right tokens
+			else if(loop_counter > 1 && (token_counter == 6))
+			{
+				node_pointer_array_row[loop_counter - 1] = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
+				node_pointer_array_data_date[loop_counter - 1] = xmlNewChild(node_pointer_array_row[loop_counter - 1], NULL, BAD_CAST "td", token);
+			}
+			// This fills in the first colummn with the "HLY-DEWP-NORMAL" table data using the right tokens
+			else if(loop_counter > 1 && (token_counter == 15))
+			{
+				node_pointer_array_data_date[loop_counter - 1] = xmlNewChild(node_pointer_array_row[loop_counter - 1], NULL, BAD_CAST "td", token);
+			}
+			// This fills in the first colummn with the "HLY-TEMP-NORMAL" date table data using the right tokens
+			else if(loop_counter > 1 && (token_counter == 23))
+			{
+				node_pointer_array_data_date[loop_counter - 1] = xmlNewChild(node_pointer_array_row[loop_counter - 1], NULL, BAD_CAST "td", token);
+			}
 
-
-
-			// My functions reside in here ^ ^ ^ ^
-			//							   | | | |
+			// Fill in table and row data accordingly  		^ ^ ^ ^
+			//							   			   		| | | |
 
 			if(token_counter == 1 && loop_counter > 1)
 			{
@@ -146,21 +145,11 @@ int main(int argc, char **argv)
 			else token = strtok(NULL, ",");
 			token_counter++;
 		}
-		printf("\n");
 		token_counter = 1;
 		loop_counter++;
 	}
-	// This code reads from file input
-
-
-	// While loop to fill the remaining tables
-	// xmlNodePtr tr4 = xmlNewChild(tbody, NULL, BAD_CAST "tr", NULL);
-
-
 	//		My code ends here  ^ ^ ^ ^
 	//						   | | | |
-
-
 
 
 	htmlSaveFileFormat(argc > 1 ? argv[1] : "-", doc, "UTF-8", 1);
